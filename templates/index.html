@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Desarrollo de software seguro</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="container">
+  <header>
+    <h1>Registro seguro de usuarios</h1>
+    <p>Ejemplo de aplicación web con validación de entradas y consultas parametrizadas.</p>
+    <a class="button" href="{{ url_for('agregar') }}">Agregar usuario</a>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <section class="card">
+    <h2>Usuarios registrados</h2>
+    {% if usuarios %}
+    <table>
+      <thead><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Edad</th><th>Acciones</th></tr></thead>
+      <tbody>
+      {% for u in usuarios %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.nombre }}</td>
+          <td>{{ u.correo }}</td>
+          <td>{{ u.edad }}</td>
+          <td class="actions">
+            <a href="{{ url_for('editar', user_id=u.id) }}">Editar</a>
+            <form method="post" action="{{ url_for('eliminar', user_id=u.id) }}">
+              <button type="submit" class="danger">Eliminar</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <p>No hay usuarios registrados.</p>
+    {% endif %}
+  </section>
+</main>
+</body>
+</html>
